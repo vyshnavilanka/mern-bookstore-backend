@@ -13,13 +13,9 @@ import {Admin} from './models/Admin.js'
 const app =express()
 app.use(express.json())
 app.use(cors({
-    origin:"*",
-    credentials: true
- 
-
+    origin:"https://book-store-frontend1-03yo.onrender.com",
 }))
 app.use(cookieParser())
-
 dotenv.config()
 app.use('/auth',AdminRouter)
 app.use('/student',studentRouter)
