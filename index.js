@@ -1,6 +1,5 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import './db.js'
 import {AdminRouter} from './routes/auth.js'
@@ -12,20 +11,28 @@ import {Admin} from './models/Admin.js'
 
 dotenv.config();
 const app =express()
-app.use(express.json())
-app.use(cors({
-  origin: 'https://book-store-frontend1-03yo.onrender.com',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
-app.use(cookieParser())
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://book-store-frontend1-03yo.onrender.com"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Private-Network", true);
+  res.setHeader("Access-Control-Max-Age", 7200);
 
-// Explicitly handle preflight requests for CORS
-app.options('*', cors({
-  origin: 'https://book-store-frontend1-03yo.onrender.com',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
+  next();
+});
+
+app.use(express.json())
+app.use(cookieParser())
 app.use('/auth',AdminRouter)
 app.use('/student',studentRouter)
 app.use('/book', bookRouter)
