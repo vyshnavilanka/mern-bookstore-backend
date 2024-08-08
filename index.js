@@ -10,6 +10,7 @@ import {Book} from './models/Book.js'
 import {Student } from './models/Student.js'
 import {Admin} from './models/Admin.js'
 
+dotenv.config();
 const app =express()
 app.use(express.json())
 app.use(cors({
@@ -18,7 +19,13 @@ app.use(cors({
   credentials: true,
 }));
 app.use(cookieParser())
-dotenv.config()
+
+// Explicitly handle preflight requests for CORS
+app.options('*', cors({
+  origin: 'https://book-store-frontend1-03yo.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 app.use('/auth',AdminRouter)
 app.use('/student',studentRouter)
 app.use('/book', bookRouter)
@@ -31,12 +38,13 @@ app.get('/dashboard',async (req,res) =>{
         return res.json({ok:true,student,book,admin})
 
     } catch(err){
-        return res.json(err)
+        return res.status(500).json({ error: 'Internal Server Error', details: err.message });
 
     }
 
 })
 
-app.listen(process.env.PORT,() =>{
-    console.log("Serve is Running");
-} )
+const port = process.env.PORT || 3000; // Default to port 3000 if not specified
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
