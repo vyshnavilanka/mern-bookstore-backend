@@ -32,7 +32,12 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json())
+app.use(cors({
+    origin:['*'],
+    credentials: true
+}))
 app.use(cookieParser())
+dotenv.config()
 app.use('/auth',AdminRouter)
 app.use('/student',studentRouter)
 app.use('/book', bookRouter)
