@@ -13,7 +13,7 @@ import {Admin} from './models/Admin.js'
 const app =express()
 app.use(express.json())
 app.use(cors({
-    origin:['*'],
+    origin:['https://book-store-frontend1-03yo.onrender.com'],
     credentials: true
  
 
