@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
             }
 
             const token = jwt.sign({ username: student.username, role: 'student' }, process.env.Student_key);
-            res.cookie('token', token, { httpOnly: true, secure: true });
+            res.cookie('token', token, { httpOnly: true, secure: true, sameSite:"none" });
 
             return res.status(200).json({ login: true, role: 'student', message: "Login successful" });
             // Add logic for handling student login
